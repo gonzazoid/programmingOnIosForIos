@@ -1,20 +1,39 @@
-Программирование под ios на ios
+<!DOCTYPE html>
+<html lang="en" class=" is-copy-enabled">
+<title>gonzazoid/programmingOnIosForIos</title>
+<link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-114.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-144.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144.png">
+<meta content="@github" name="twitter:site" /><meta content="summary" name="twitter:card" /><meta content="gonzazoid/programmingOnIosForIos" name="twitter:title" /><meta content="programmingOnIosForIos - Программирование под ios на ios" name="twitter:description" /><meta content="https://avatars2.githubusercontent.com/u/12472060?v=3&amp;s=400" name="twitter:image:src" />
+      <meta content="GitHub" property="og:site_name" /><meta content="object" property="og:type" /><meta content="https://avatars2.githubusercontent.com/u/12472060?v=3&amp;s=400" property="og:image" /><meta content="gonzazoid/programmingOnIosForIos" property="og:title" /><meta content="https://github.com/gonzazoid/programmingOnIosForIos" property="og:url" /><meta content="programmingOnIosForIos - Программирование под ios на ios" property="og:description" />
+<meta name="description" content="programmingOnIosForIos - Программирование под ios на ios">
+  <meta name="go-import" content="github.com/gonzazoid/programmingOnIosForIos git https://github.com/gonzazoid/programmingOnIosForIos.git">
+ <link crossorigin="anonymous" href="https://assets-cdn.github.com/assets/github/index-2de9f2a0dcbebdb929c6fddf7fd94aa06a736743201b9c57db4c19cb74757211.css" media="all" rel="stylesheet" />
+    <link crossorigin="anonymous" href="https://assets-cdn.github.com/assets/github2/index-10a543c559e7ab841ecdc482a2ddb7aa9edaa55a3804cd1eec016d526c1b1c88.css" media="all" rel="stylesheet" />
+    
+</head>
+<body>
+<article class="markdown-body entry-content" itemprop="mainContentOfPage"><h1><a id="user-content-programmingoniosforios" class="anchor" href="#programmingoniosforios" aria-hidden="true"><span class="octicon octicon-link"></span></a>programmingOnIosForIos</h1>
 
-Здравствуйте.
+<p>Программирование под ios на ios</p>
 
-В статье рассказано как подготовить jailbroken ipad (ios7/8) для компиляции проектов на C/Objective C/C++ и рассмотрена компиляция одной программы (форк MobileTerminal).
+<p>Здравствуйте.</p>
 
-Написано по мотивам статьи <a href="http://habrahabr.ru/sandbox/35151/">Компилируем C/C++ на iPhone/iPad</a> 2011 года, автор которой к сожалению так и не получил инвайта. Информация обновлена в соответствии с реалиями, gcc заменен на clang.
+<p>В статье рассказано как подготовить jailbroken ipad (ios7/8) для компиляции проектов на C/Objective C/C++ и рассмотрена компиляция одной программы (форк MobileTerminal).</p>
 
-Итак, поехали.
+<p>Написано по мотивам статьи <a href="http://habrahabr.ru/sandbox/35151/">Компилируем C/C++ на iPhone/iPad</a> 2011 года, автор которой к сожалению так и не получил инвайта. Информация обновлена в соответствии с реалиями, gcc заменен на clang.</p>
+
+<p>Итак, поехали.
 Все описанное происходило на ipad2, ios7.1.1, позже - на ios8.1.2.
-Предполагается что устройство уже jailbreak-нуто, Cydia установлена.
+Предполагается что устройство уже jailbreak-нуто, Cydia установлена.</p>
 
-Dos-way, рассматриваемый в упомянутой статье рассматривать не будем, перейдем сразу к unix-way.
+<p>Dos-way, рассматриваемый в упомянутой статье рассматривать не будем, перейдем сразу к unix-way.</p>
 
-Сразу обозначу распространенное на просторах интернета заблуждение. SSH, который все настойчиво рекомендуют ставить сразу после jailbreak-а - не нужен. Во всех статьях, которые мне попадались на эту тему, рекомендовалось поднять локально ssh-сервер и локально же коннектиться к нему с ssh-клиента. Если вам не нужен доступ к вашему устройству снаружи - не делайте этого, достаточно MobileTerminal. Он монструозен, задумчив и немного amnesiac, но ниже рассматривается курс лечения, ничего страшного.
+<p>Сразу обозначу распространенное на просторах интернета заблуждение. SSH, который все настойчиво рекомендуют ставить сразу после jailbreak-а - не нужен. Во всех статьях, которые мне попадались на эту тему, рекомендовалось поднять локально ssh-сервер и локально же коннектиться к нему с ssh-клиента. Если вам не нужен доступ к вашему устройству снаружи - не делайте этого, достаточно MobileTerminal. Он монструозен, задумчив и немного amnesiac, но ниже рассматривается курс лечения, ничего страшного.</p>
 
-Для начала установим необходимый софт из Cydia. Нам нужны пакеты:
+<p>Для начала установим необходимый софт из Cydia. Нам нужны пакеты:</p>
+
 <ul>
 <li>Core utilites(/bin)</li>
 <li>Core utilites</li>
@@ -26,48 +45,46 @@ Dos-way, рассматриваемый в упомянутой статье р�
 <li>gawk</li>
 <li>Debian Packager</li>
 </ul>
-После установки MobileTerminal меняем дефолтный пароль. В системе два пользователя - mobile и root, mobile для всех программ в системе, root - он и на ios root. У рута дефолтный пароль - alpine, делаем passwd и указываем свой пароль. Шелл у нас, кстати - bash (в cydia можно скачать и zsh, возможно есть и другие шеллы).
 
-Теперь можно скачать SDK. Прямых линков на сайте apple я не нашел - они sdk раздают вместе с xCode и через свой store, поэтому пришлось погуглить. Неплохая подборка sdk разных версий есть здесь <a href="http://iphone.howett.net/sdks/">http://iphone.howett.net/sdks/</a>. Я для sdk завел директорию в домашней директории пользователя - SDKs, ставить sdk будем в нее. Ахтунг - я везде использую SDK семерки, при сборе с хидерами и либами восьмерки все работает крайне нестабильно. Делаем:
+<p>После установки MobileTerminal меняем дефолтный пароль. В системе два пользователя - mobile и root, mobile для всех программ в системе, root - он и на ios root. У рута дефолтный пароль - alpine, делаем passwd и указываем свой пароль. Шелл у нас, кстати - bash (в cydia можно скачать и zsh, возможно есть и другие шеллы).</p>
 
-<source lang="bash">
-cd /User/SDKs
+<p>Теперь можно скачать SDK. Прямых линков на сайте apple я не нашел - они sdk раздают вместе с xCode и через свой store, поэтому пришлось погуглить. Неплохая подборка sdk разных версий есть здесь <a href="http://iphone.howett.net/sdks/"></a><a href="http://iphone.howett.net/sdks/">http://iphone.howett.net/sdks/</a>. Я для sdk завел директорию в домашней директории пользователя - SDKs, ставить sdk будем в нее. Ахтунг - я везде использую SDK семерки, при сборе с хидерами и либами восьмерки все работает крайне нестабильно. Делаем:</p>
+
+<div class="highlight highlight-bash"><pre><span class="pl-c1">cd</span> /User/SDKs
 wget http://iphone.howett.net/sdks/dl/iPhoneOS7.1.sdk.tbz2
 tar -xjf iPhoneOS7.1.sdk.tbz2
-mv iPhoneOS7.1.sdk 7.1
-</source>
-в итоге путь до SDK получился такой: /User/SDKs/7.1/
-Конкретно в этой версии(что будет в более поздних - не знаю) apple забыла положить crt_externs.h, но на сайте у них этот файлик есть. Исправляем несправедливость:
+mv iPhoneOS7.1.sdk 7.1</pre></div>
 
-<source lang="bash">
-cd /User/SDKs/7.1/usr/include/
-wget http://www.opensource.apple.com/source/Libc/Libc-391/include/crt_externs.h?txt -O crt_externs.h 
-</source>
-Итак, компилятор стоит, тулчаин присутствует, пора хэлловордить. Набиваем в vim-e:
-<source lang="C++">
-#include <stdio.h>
-int main(){
-    printf("hello, word\n");
-    return 0;
-}
-</source>
-сохраняем в hello.c и собираем:<pre>clang hello.c -o hello -isysroot /User/SDKs/7.1/ -Xlinker -isysroot /User/SDKs/7.1 </pre>
+<p>в итоге путь до SDK получился такой: /User/SDKs/7.1/
+Конкретно в этой версии(что будет в более поздних - не знаю) apple забыла положить crt_externs.h, но на сайте у них этот файлик есть. Исправляем несправедливость:</p>
+
+<div class="highlight highlight-bash"><pre><span class="pl-c1">cd</span> /User/SDKs/7.1/usr/include/
+wget http://www.opensource.apple.com/source/Libc/Libc-391/include/crt_externs.h<span class="pl-k">?</span>txt -O crt_externs.h </pre></div>
+
+<p>Итак, компилятор стоит, тулчаин присутствует, пора хэлловордить. Набиваем в vim-e:</p>
+
+<div class="highlight highlight-C++"><pre>#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>stdio.h<span class="pl-pds">&gt;</span></span>
+<span class="pl-k">int</span> <span class="pl-en">main</span>(){
+    <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span>hello, word<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>);
+    <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+}</pre></div>
+
+<p>сохраняем в hello.c и собираем:</p><pre>clang hello.c -o hello -isysroot /User/SDKs/7.1/ -Xlinker -isysroot /User/SDKs/7.1 </pre>
 Запускаем: ./hello Ок, все работает. Я у себя создал папку bin в домашней директории и прописал ее в PATH (vim /etc/profile), чтобы не заморачиваться с путями для самособранных велосипедов. Под семеркой этотработало, но вот восьмерка при вызове такой программы без полного пути почему то уходит в ребут, с этим еще разбираюсь.
 Что же, теперь можно заняться нашим терминалом. MobileTerminal имеет плохую привычку - при переключении на другое приложение он напрочь забывает все что было и при возврате к его окну хочет начинать все заново - история сбрасывается. Во первых это напрягает, во вторых течет он не по детски, мне на ipad2 64gb приходилось перезапускать приложение каждые полчаса. 
 MobileTerminal opensours-ный, но написан (на Objective-C) под xCode, которого у нас на девайсе нет. Но! нашлись <a href="https://bitbucket.org/lordscotland">добрые люди</a> и <a href="https://bitbucket.org/lordscotland/mterminal/src">переписали этот проект</a> под фрейворк TheOS, заодно убрав лишние плюшки, а именно - запуск нескольких сеансов шелла в одном окне (правильно это делать через мультиплексор, такой как tmux, например), убрали окно для добавления esc-последовательностей, реализовав вместо этого функционал кнопки ctrl, что позволяет ввести любой esc-символ напрямую с клавиатуры. Код также открыт. Но и здесь есть но! TheOS - совершенно лишняя сущность. Плюс у бинарника - клавиатура iphone, что для планшета вообще некомильфо. Плюс при landscape ориентации устройства при запуске программы она вылетает с негодованием. Ну и еще он выводит статус бар поверх приглашения шелла и это некрасиво.
 Мы пойдем дальше - отучим его от TheOS, прикрутим нормальный make и назовем vTerminal-ом.
 Отучить проект от TheOS оказалось нетрудно - пришлось просто пройтись по файлам проекта и прописать includ-ы соотв. хидеров. Заострять не буду, желающие могут скачать исходники обоих проектов и сравнить. Вот прямой линк на скачивание <a href="https://bitbucket.org/lordscotland/mterminal/get/b32cfdf343ae.zip">MTerminal</a>.
-Теперь, что бы скомпилировать это добро, надо все *.m файлы скомпилировать в объектники, а объектники собрать в один бинарник. Делаем простой Makefile:
+Теперь, что бы скомпилировать это добро, надо все *.m файлы скомпилировать в объектники, а объектники собрать в один бинарник. Делаем простой Makefile:<p></p>
 
-<source lang="CMake">
-SYSROOT = /User/SDKs/7.1
+<div class="highlight highlight-CMake"><pre>SYSROOT = /User/SDKs/7.1
 SOURCES    = $(wildcard *.m)
 PRODUCT_NAME = vTerminal
 CC = clang
 
 CFLAGS = -Wall -v -isysroot $(SYSROOT)
 
-LD = ${CC}
+LD = <span class="pl-v">${CC}</span>
 LDFLAGS = \
           -isysroot $(SYSROOT)\
           -ObjC \
@@ -82,291 +99,291 @@ EXECUTABLE_NAME = $(PRODUCT_NAME)
 OBJECTS = $(patsubst %.m,%.o,$(filter %.m,$(SOURCES)))
 
 $(PRODUCT_NAME): $(OBJECTS)
-	$(LD) $(LDFLAGS) -o $(PRODUCT_NAME) $(OBJECTS)
+    $(LD) $(LDFLAGS) -o $(PRODUCT_NAME) $(OBJECTS)
 %.o: %.m
-	$(CC) $(CFLAGS) -c $< -o $@
-</source>
-На что обратить внимание? Ну, во первых SYSROOT, значение которого используется во флаге isysroot для clang - указывает на директорию с SDK. Это гораздо лаконичнее, чем указывать пути хидеров для компилятора и либы для линкера. Да, путь прибит гвоздями к коду, но заморачиваться на configure в этой ситуации я считаю совершенно излишне. Если вы разместили sdk в другом месте - просто поменяйте путь. Я же планирую оформить sdk в виде .deb пакета и в будущем не заморачиваться на пути а просто прописывать его в depends-ах. 
+    $(CC) $(CFLAGS) -c $&lt; -o $@</pre></div>
+
+<p>На что обратить внимание? Ну, во первых SYSROOT, значение которого используется во флаге isysroot для clang - указывает на директорию с SDK. Это гораздо лаконичнее, чем указывать пути хидеров для компилятора и либы для линкера. Да, путь прибит гвоздями к коду, но заморачиваться на configure в этой ситуации я считаю совершенно излишне. Если вы разместили sdk в другом месте - просто поменяйте путь. Я же планирую оформить sdk в виде .deb пакета и в будущем не заморачиваться на пути а просто прописывать его в depends-ах. 
 Также стоит обратить внимание на флаги -framework - у нас Objective-C и apple, так что приходится указывать фреймворки, используемые проектом. Для нежелающих вникать - framework в исполнении apple - это типа либы, только навороченнее. Подробнее можно выяснить на <a href="https://developer.apple.com/library/ios/documentation/MacOSX/Conceptual/BPFrameworks/Frameworks.html">сайте apple</a>.
 Сохраняем Makefile в директории проекта, делаем make. Если все сделано правильно - на выходе должен быть бинарник с именем vTerminal. Ура! Но нет, рано. Дело в том что запустить мы его не сможем - это гуевое приложение, и с командной строки просто так не запустится. Надо его инсталлить в систему. Разбираться в тонкостях ios на этом этапе я не стал и решил собрать простой deb-пакет что бы установить его с помощью dpkg. Итого - разбираемся в устройстве .deb и учим make собирать такой пакет.
 Для этого нам надо понимать два момента - структуру .deb пакета и состав гуевого приложения под ios.
 На .deb пакетах сильно растекаться не буду, кому надо подробностей - вот шикарная статья о том <a href="http://habrahabr.ru/post/78094/">как собрать deb пакет</a>. 
-Что касается нашего приложения - на данном этапе обозначу control-файл пакета:
+Что касается нашего приложения - на данном этапе обозначу control-файл пакета:</p>
 
-<source lang="Ini">
-Package: net.openios.vterminal
+<div class="highlight highlight-Ini"><pre>Package: net.openios.vterminal
 Name: vTerminal
 Depends: bash
 Version: 0.1
 Architecture: iphoneos-arm
 Description: A MobileTerminal fork
-Maintainer: hCc <hCc@openios.net>
-Author: hCc <hCc@openios.net>
-Section: Utilities
-</source>
-Собственно комментировать тут особо нечего, тут и так все понятно. Package может быть любым уникальным тестовым идентификатором, в мире apple принята реверсная запись домена, но это не обязательно. В зависимостях - bash, потому как не будет шелла - некуда коннектится терминалу. dpkg кстати зависимости не обрабатывает, это делает apt, но тем не менее пусть будет, так правильнее.
-В общем здесь вопросов возникнуть не должно, предлагаю переходить к структуре приложения.
+Maintainer: hCc &lt;hCc@openios.net&gt;
+Author: hCc &lt;hCc@openios.net&gt;
+Section: Utilities</pre></div>
 
-Минимальное gui-ios приложение может разместиться в одной директории и содержать следующие файлы:
+<p>Собственно комментировать тут особо нечего, тут и так все понятно. Package может быть любым уникальным тестовым идентификатором, в мире apple принята реверсная запись домена, но это не обязательно. В зависимостях - bash, потому как не будет шелла - некуда коннектится терминалу. dpkg кстати зависимости не обрабатывает, это делает apt, но тем не менее пусть будет, так правильнее.
+В общем здесь вопросов возникнуть не должно, предлагаю переходить к структуре приложения.</p>
+
+<p>Минимальное gui-ios приложение может разместиться в одной директории и содержать следующие файлы:</p>
+
 <ul>
 <li>бинарник приложения (тот самый, который мы уже получили)</li>
 <li>Info.plist - базовые настройки приложения (в том числе используемые системой при запуске приложения)</li>
 <li>*.png - набор значков приложения</li>
 </ul>
 
-На картинках тоже сильно распыляться не буду, я просто скопировал все значки с директории MTerminal. Интересующиеся могут ознакомиться с <a href="https://developer.apple.com/library/ios/qa/qa1686/_index.html">требованиями и рекомендациями apple к набору значков приложения</a>.
+<p>На картинках тоже сильно распыляться не буду, я просто скопировал все значки с директории MTerminal. Интересующиеся могут ознакомиться с <a href="https://developer.apple.com/library/ios/qa/qa1686/_index.html">требованиями и рекомендациями apple к набору значков приложения</a>.</p>
 
-Что касается Info.plist, это xml файл с некоторыми настройками приложения. Здесь я рассмотрю info.plist терминала, за подробностями формата можно сходить сюда <a href="https://developer.apple.com/library/ios/documentation/General/Reference/InfoPlistKeyReference/Introduction/Introduction.html">Info.plist key reference</a>.
+<p>Что касается Info.plist, это xml файл с некоторыми настройками приложения. Здесь я рассмотрю info.plist терминала, за подробностями формата можно сходить сюда <a href="https://developer.apple.com/library/ios/documentation/General/Reference/InfoPlistKeyReference/Introduction/Introduction.html">Info.plist key reference</a>.</p>
 
-<source lang="XML">
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>English</string>
-	<key>CFBundleDisplayName</key>
-	<string>vterminal</string>
-	<key>CFBundleExecutable</key>
-	<string>vterminal</string>
-	<key>CFBundleIconFiles</key>
-	<array>
-		<string>Icon</string>
-		<string>Icon@2x</string>
-		<string>Icon-Small</string>
-		<string>Icon-Small@2x</string>
-		<string>Icon-72</string>
-		<string>Icon-Small-50</string>
-	</array>
-	<key>CFBundleIdentifier</key>
-	<string>net.openios.vterminal</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundleName</key>
-	<string>vterminal</string>
-	<key>CFBundlePackageType</key>
-	<string>APPL</string>
-	<key>CFBundleSignature</key>
-	<string>????</string>
-	<key>CFBundleSupportedPlatforms</key>
-	<array>
-		<string>iPhoneOS</string>
-	</array>
-	<key>CFBundleVersion</key>
-	<string>1.0</string>
-	<key>LSRequiresIPhoneOS</key>
-	<true/>
-	<key>MinimumOSVersion</key>
-	<string>7.0.0</string>
-	<key>UIDeviceFamily</key>
-	<array>
-		<integer>1</integer>
-		<integer>2</integer>
-	</array>
-	<key>UIPrerenderedIcon</key>
-	<true/>
-	<key>UIStatusBarHidden</key>
-	<true/>
-	<key>UIInterfaceOrientation</key>
-	<string>UIInterfaceOrientationLandscapeLeft</string>
-</dict>
-</plist>
-</source>
+<div class="highlight highlight-XML"><pre>&lt;?<span class="pl-ent">xml</span><span class="pl-e"> version</span>=<span class="pl-s"><span class="pl-pds">"</span>1.0<span class="pl-pds">"</span></span><span class="pl-e"> encoding</span>=<span class="pl-s"><span class="pl-pds">"</span>UTF-8<span class="pl-pds">"</span></span>?&gt;
+&lt;!<span class="pl-k">DOCTYPE</span> <span class="pl-v">plist</span> PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
+&lt;<span class="pl-ent">plist</span> <span class="pl-e">version</span>=<span class="pl-s"><span class="pl-pds">"</span>1.0<span class="pl-pds">"</span></span>&gt;
+&lt;<span class="pl-ent">dict</span>&gt;
+    &lt;<span class="pl-ent">key</span>&gt;CFBundleDevelopmentRegion&lt;/<span class="pl-ent">key</span>&gt;
+    &lt;<span class="pl-ent">string</span>&gt;English&lt;/<span class="pl-ent">string</span>&gt;
+    &lt;<span class="pl-ent">key</span>&gt;CFBundleDisplayName&lt;/<span class="pl-ent">key</span>&gt;
+    &lt;<span class="pl-ent">string</span>&gt;vterminal&lt;/<span class="pl-ent">string</span>&gt;
+    &lt;<span class="pl-ent">key</span>&gt;CFBundleExecutable&lt;/<span class="pl-ent">key</span>&gt;
+    &lt;<span class="pl-ent">string</span>&gt;vterminal&lt;/<span class="pl-ent">string</span>&gt;
+    &lt;<span class="pl-ent">key</span>&gt;CFBundleIconFiles&lt;/<span class="pl-ent">key</span>&gt;
+    &lt;<span class="pl-ent">array</span>&gt;
+        &lt;<span class="pl-ent">string</span>&gt;Icon&lt;/<span class="pl-ent">string</span>&gt;
+        &lt;<span class="pl-ent">string</span>&gt;Icon@2x&lt;/<span class="pl-ent">string</span>&gt;
+        &lt;<span class="pl-ent">string</span>&gt;Icon-Small&lt;/<span class="pl-ent">string</span>&gt;
+        &lt;<span class="pl-ent">string</span>&gt;Icon-Small@2x&lt;/<span class="pl-ent">string</span>&gt;
+        &lt;<span class="pl-ent">string</span>&gt;Icon-72&lt;/<span class="pl-ent">string</span>&gt;
+        &lt;<span class="pl-ent">string</span>&gt;Icon-Small-50&lt;/<span class="pl-ent">string</span>&gt;
+    &lt;/<span class="pl-ent">array</span>&gt;
+    &lt;<span class="pl-ent">key</span>&gt;CFBundleIdentifier&lt;/<span class="pl-ent">key</span>&gt;
+    &lt;<span class="pl-ent">string</span>&gt;net.openios.vterminal&lt;/<span class="pl-ent">string</span>&gt;
+    &lt;<span class="pl-ent">key</span>&gt;CFBundleInfoDictionaryVersion&lt;/<span class="pl-ent">key</span>&gt;
+    &lt;<span class="pl-ent">string</span>&gt;6.0&lt;/<span class="pl-ent">string</span>&gt;
+    &lt;<span class="pl-ent">key</span>&gt;CFBundleName&lt;/<span class="pl-ent">key</span>&gt;
+    &lt;<span class="pl-ent">string</span>&gt;vterminal&lt;/<span class="pl-ent">string</span>&gt;
+    &lt;<span class="pl-ent">key</span>&gt;CFBundlePackageType&lt;/<span class="pl-ent">key</span>&gt;
+    &lt;<span class="pl-ent">string</span>&gt;APPL&lt;/<span class="pl-ent">string</span>&gt;
+    &lt;<span class="pl-ent">key</span>&gt;CFBundleSignature&lt;/<span class="pl-ent">key</span>&gt;
+    &lt;<span class="pl-ent">string</span>&gt;????&lt;/<span class="pl-ent">string</span>&gt;
+    &lt;<span class="pl-ent">key</span>&gt;CFBundleSupportedPlatforms&lt;/<span class="pl-ent">key</span>&gt;
+    &lt;<span class="pl-ent">array</span>&gt;
+        &lt;<span class="pl-ent">string</span>&gt;iPhoneOS&lt;/<span class="pl-ent">string</span>&gt;
+    &lt;/<span class="pl-ent">array</span>&gt;
+    &lt;<span class="pl-ent">key</span>&gt;CFBundleVersion&lt;/<span class="pl-ent">key</span>&gt;
+    &lt;<span class="pl-ent">string</span>&gt;1.0&lt;/<span class="pl-ent">string</span>&gt;
+    &lt;<span class="pl-ent">key</span>&gt;LSRequiresIPhoneOS&lt;/<span class="pl-ent">key</span>&gt;
+    &lt;<span class="pl-ent">true</span>/&gt;
+    &lt;<span class="pl-ent">key</span>&gt;MinimumOSVersion&lt;/<span class="pl-ent">key</span>&gt;
+    &lt;<span class="pl-ent">string</span>&gt;7.0.0&lt;/<span class="pl-ent">string</span>&gt;
+    &lt;<span class="pl-ent">key</span>&gt;UIDeviceFamily&lt;/<span class="pl-ent">key</span>&gt;
+    &lt;<span class="pl-ent">array</span>&gt;
+        &lt;<span class="pl-ent">integer</span>&gt;1&lt;/<span class="pl-ent">integer</span>&gt;
+        &lt;<span class="pl-ent">integer</span>&gt;2&lt;/<span class="pl-ent">integer</span>&gt;
+    &lt;/<span class="pl-ent">array</span>&gt;
+    &lt;<span class="pl-ent">key</span>&gt;UIPrerenderedIcon&lt;/<span class="pl-ent">key</span>&gt;
+    &lt;<span class="pl-ent">true</span>/&gt;
+    &lt;<span class="pl-ent">key</span>&gt;UIStatusBarHidden&lt;/<span class="pl-ent">key</span>&gt;
+    &lt;<span class="pl-ent">true</span>/&gt;
+    &lt;<span class="pl-ent">key</span>&gt;UIInterfaceOrientation&lt;/<span class="pl-ent">key</span>&gt;
+    &lt;<span class="pl-ent">string</span>&gt;UIInterfaceOrientationLandscapeLeft&lt;/<span class="pl-ent">string</span>&gt;
+&lt;/<span class="pl-ent">dict</span>&gt;
+&lt;/<span class="pl-ent">plist</span>&gt;</pre></div>
 
+<p>Ну что же, пора собирать deb пакет.</p>
 
-Ну что же, пора собирать deb пакет.
+<hr>
 
-----
-А десерт - небольшая утилитка по конвертации бинарных .plist в xml-ные и обратно. Пакет оформлять не стал, прикладываю сорцы:
-<spoiler title="plistconvert.m 172 lines">
-<source lang="Objective C">
-/* plistconvert: convert plist files.
-   Copyright 2015
-   Trusted Software Foundation.
+<p>А десерт - небольшая утилитка по конвертации бинарных .plist в xml-ные и обратно. Пакет оформлять не стал, прикладываю сорцы:
+</p>
 
-   This file is part of openIOS utils.
-   See more on openios.net
-   
-   This program is totally free software,
-   you can do with it whatever you want.
-*/
+<div class="highlight highlight-objective-c"><pre><span class="pl-c">/* plistconvert: convert plist files.</span>
+<span class="pl-c">   Copyright 2015</span>
+<span class="pl-c">   Trusted Software Foundation.</span>
+<span class="pl-c"></span>
+<span class="pl-c">   This file is part of openIOS utils.</span>
+<span class="pl-c">   See more on openios.net</span>
+<span class="pl-c"></span>
+<span class="pl-c">   This program is totally free software,</span>
+<span class="pl-c">   you can do with it whatever you want.</span>
+<span class="pl-c">*/</span>
 
-#import <Foundation/Foundation.h>
-#include <stdio.h>
+#<span class="pl-k">import</span> <span class="pl-s"><span class="pl-pds">&lt;</span>Foundation/Foundation.h<span class="pl-pds">&gt;</span></span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>stdio.h<span class="pl-pds">&gt;</span></span>
 
-#define REPORT_BUGS_TO "root@openios.net"
-#define VERSION_STRING "v0.3"
+#<span class="pl-k">define</span> <span class="pl-en">REPORT_BUGS_TO</span> <span class="pl-s"><span class="pl-pds">"</span>root@openios.net<span class="pl-pds">"</span></span>
+#<span class="pl-k">define</span> <span class="pl-en">VERSION_STRING</span> <span class="pl-s"><span class="pl-pds">"</span>v0.3<span class="pl-pds">"</span></span>
 
-#define BIN 1
-#define XML 0
+#<span class="pl-k">define</span> <span class="pl-en">BIN</span> <span class="pl-c1">1</span>
+#<span class="pl-k">define</span> <span class="pl-en">XML</span> <span class="pl-c1">0</span>
 
-int plistConvert(const char *, int, char *);
+<span class="pl-k">int</span> <span class="pl-en">plistConvert</span>(<span class="pl-k">const</span> <span class="pl-k">char</span> *, <span class="pl-k">int</span>, <span class="pl-k">char</span> *);
 
-void print_version (const char *name)
+<span class="pl-k">void</span> <span class="pl-en">print_version</span> (<span class="pl-k">const</span> <span class="pl-k">char</span> *name)
 {
-  printf (" %s %s\n", name, VERSION_STRING);
-  printf ("Copyright 2015 Trusted Software Foundation\n");
-  printf ("licensed: as is.\n");
-  exit (0);
+  <span class="pl-c1">printf</span> (<span class="pl-s"><span class="pl-pds">"</span> <span class="pl-c1">%s</span> <span class="pl-c1">%s</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, name, VERSION_STRING);
+  <span class="pl-c1">printf</span> (<span class="pl-s"><span class="pl-pds">"</span>Copyright 2015 Trusted Software Foundation<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>);
+  <span class="pl-c1">printf</span> (<span class="pl-s"><span class="pl-pds">"</span>licensed: as is.<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>);
+  <span class="pl-c1">exit</span> (<span class="pl-c1">0</span>);
 }
 
-static void usage (int help, const char *name)
+<span class="pl-k">static</span> <span class="pl-k">void</span> <span class="pl-en">usage</span> (<span class="pl-k">int</span> help, <span class="pl-k">const</span> <span class="pl-k">char</span> *name)
 {
-  FILE *s;
+  <span class="pl-c1">FILE</span> *s;
 
   s = help ? stdout : stderr;
-  
-  fprintf (s, "Usage: %s -options plist_files\n", name);
-  fprintf (s, " Convert *.plist files to readable xml format or back to binary.\n");
-  fprintf (s, " Saves files with the same name.\n");
-//  fprintf (s, " If there are no files tries to read stdin(piping)\n");
-  fprintf (s, " The options are:\n\
-  -b                              convert to binary format\n\
-  -t -x                           convert to text(xml) format\n\
-  -h -H --help                    print this help message\n\
-  -v -V --version                 print version information\n");
+
+  <span class="pl-c1">fprintf</span> (s, <span class="pl-s"><span class="pl-pds">"</span>Usage: <span class="pl-c1">%s</span> -options plist_files<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, name);
+  <span class="pl-c1">fprintf</span> (s, <span class="pl-s"><span class="pl-pds">"</span> Convert *.plist files to readable xml format or back to binary.<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>);
+  <span class="pl-c1">fprintf</span> (s, <span class="pl-s"><span class="pl-pds">"</span> Saves files with the same name.<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>);
+<span class="pl-c">//  fprintf (s, " If there are no files tries to read stdin(piping)\n");</span>
+  <span class="pl-c1">fprintf</span> (s, <span class="pl-s"><span class="pl-pds">"</span> The options are:<span class="pl-cce">\n</span>\</span>
+<span class="pl-s">  -b                              convert to binary format<span class="pl-cce">\n</span>\</span>
+<span class="pl-s">  -t -x                           convert to text(xml) format<span class="pl-cce">\n</span>\</span>
+<span class="pl-s">  -h -H --help                    print this help message<span class="pl-cce">\n</span>\</span>
+<span class="pl-s">  -v -V --version                 print version information<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>);
 
 
-  if (help)
-    fprintf (s, "Report bugs to %s\n", REPORT_BUGS_TO);
+  <span class="pl-k">if</span> (help)
+    <span class="pl-c1">fprintf</span> (s, <span class="pl-s"><span class="pl-pds">"</span>Report bugs to <span class="pl-c1">%s</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, REPORT_BUGS_TO);
 
-  exit (help ? 0 : 1);
+  <span class="pl-c1">exit</span> (help ? <span class="pl-c1">0</span> : <span class="pl-c1">1</span>);
 }
 
-int main(int argc, char *argv[])
+<span class="pl-k">int</span> <span class="pl-en">main</span>(<span class="pl-k">int</span> argc, <span class="pl-k">char</span> *argv[])
 {
-    if (argc < 1) usage (0, program_name);
-    
-    const char *program_name;
-    program_name = argv[0];
-    int i = 2;
-    int targetFormat;
-    const char *status[80];
-  
-    if (argc < 2) usage (0, program_name);
-  
-    if (argv[1][0] == '-')
-    {
-        if (strcmp (argv[1], "--help") == 0
-             || strcmp (argv[1], "-h") == 0
-             || strcmp (argv[1], "-H") == 0)
-               
-            usage (1, program_name);
-        
-        else if (strcmp (argv[1], "--version") == 0
-                     || strcmp (argv[1], "-V") == 0
-                     || strcmp (argv[1], "-v") == 0)
-    
-                 print_version (program_name);
-             else
-             {
-                 if (strcmp (argv[1], "-b") == 0) targetFormat = BIN;
-                 else if (strcmp (argv[1], "-t") == 0
-                       || strcmp (argv[1], "-x") == 0) targetFormat = XML;
-                      else usage(0, program_name);
-                 
-                 while(i < argc)
-                 {       
-                     printf("%s: ", argv[i]);
+    <span class="pl-k">if</span> (argc &lt; <span class="pl-c1">1</span>) <span class="pl-c1">usage</span> (<span class="pl-c1">0</span>, program_name);
 
-                     if(0 == plistConvert(argv[i], targetFormat, status))
-                         printf("Ok\n");
-                     else printf("failed with error: %s \n", status);
-                     
+    <span class="pl-k">const</span> <span class="pl-k">char</span> *program_name;
+    program_name = argv[<span class="pl-c1">0</span>];
+    <span class="pl-k">int</span> i = <span class="pl-c1">2</span>;
+    <span class="pl-k">int</span> targetFormat;
+    <span class="pl-k">const</span> <span class="pl-k">char</span> *status[<span class="pl-c1">80</span>];
+
+    <span class="pl-k">if</span> (argc &lt; <span class="pl-c1">2</span>) <span class="pl-c1">usage</span> (<span class="pl-c1">0</span>, program_name);
+
+    <span class="pl-k">if</span> (argv[<span class="pl-c1">1</span>][<span class="pl-c1">0</span>] == <span class="pl-s"><span class="pl-pds">'</span>-<span class="pl-pds">'</span></span>)
+    {
+        <span class="pl-k">if</span> (<span class="pl-c1">strcmp</span> (argv[<span class="pl-c1">1</span>], <span class="pl-s"><span class="pl-pds">"</span>--help<span class="pl-pds">"</span></span>) == <span class="pl-c1">0</span>
+             || <span class="pl-c1">strcmp</span> (argv[<span class="pl-c1">1</span>], <span class="pl-s"><span class="pl-pds">"</span>-h<span class="pl-pds">"</span></span>) == <span class="pl-c1">0</span>
+             || <span class="pl-c1">strcmp</span> (argv[<span class="pl-c1">1</span>], <span class="pl-s"><span class="pl-pds">"</span>-H<span class="pl-pds">"</span></span>) == <span class="pl-c1">0</span>)
+
+            <span class="pl-c1">usage</span> (<span class="pl-c1">1</span>, program_name);
+
+        <span class="pl-k">else</span> <span class="pl-k">if</span> (<span class="pl-c1">strcmp</span> (argv[<span class="pl-c1">1</span>], <span class="pl-s"><span class="pl-pds">"</span>--version<span class="pl-pds">"</span></span>) == <span class="pl-c1">0</span>
+                     || <span class="pl-c1">strcmp</span> (argv[<span class="pl-c1">1</span>], <span class="pl-s"><span class="pl-pds">"</span>-V<span class="pl-pds">"</span></span>) == <span class="pl-c1">0</span>
+                     || <span class="pl-c1">strcmp</span> (argv[<span class="pl-c1">1</span>], <span class="pl-s"><span class="pl-pds">"</span>-v<span class="pl-pds">"</span></span>) == <span class="pl-c1">0</span>)
+
+                 <span class="pl-c1">print_version</span> (program_name);
+             <span class="pl-k">else</span>
+             {
+                 <span class="pl-k">if</span> (<span class="pl-c1">strcmp</span> (argv[<span class="pl-c1">1</span>], <span class="pl-s"><span class="pl-pds">"</span>-b<span class="pl-pds">"</span></span>) == <span class="pl-c1">0</span>) targetFormat = BIN;
+                 <span class="pl-k">else</span> <span class="pl-k">if</span> (<span class="pl-c1">strcmp</span> (argv[<span class="pl-c1">1</span>], <span class="pl-s"><span class="pl-pds">"</span>-t<span class="pl-pds">"</span></span>) == <span class="pl-c1">0</span>
+                       || <span class="pl-c1">strcmp</span> (argv[<span class="pl-c1">1</span>], <span class="pl-s"><span class="pl-pds">"</span>-x<span class="pl-pds">"</span></span>) == <span class="pl-c1">0</span>) targetFormat = XML;
+                      <span class="pl-k">else</span> <span class="pl-c1">usage</span>(<span class="pl-c1">0</span>, program_name);
+
+                 <span class="pl-k">while</span>(i &lt; argc)
+                 {       
+                     <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">%s</span>: <span class="pl-pds">"</span></span>, argv[i]);
+
+                     <span class="pl-k">if</span>(<span class="pl-c1">0</span> == <span class="pl-c1">plistConvert</span>(argv[i], targetFormat, status))
+                         <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span>Ok<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>);
+                     <span class="pl-k">else</span> <span class="pl-c1">printf</span>(<span class="pl-s"><span class="pl-pds">"</span>failed with error: <span class="pl-c1">%s</span> <span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, status);
+
                      i++;
                  }
-                 exit(0);   
+                 <span class="pl-c1">exit</span>(<span class="pl-c1">0</span>);   
              }
 
     }
-  
-    usage (0, program_name);
+
+    <span class="pl-c1">usage</span> (<span class="pl-c1">0</span>, program_name);
 }
 
-plistError(NSError *error, char *status)
+<span class="pl-en">plistError</span>(<span class="pl-c1">NSError</span> *error, <span class="pl-k">char</span> *status)
 {
-    char *cError;
-    char *hint = "";
-    char *notFound = "(file not found?)";
-    char *notPlist = "(file not *.plist?)";
-    char *chmod = "(can't write, not enough rights?)";
-    int code;
-  
-    cError = [[error domain] UTF8String];
-    code = [error code];
-    
-    if(strcmp (cError, "NSCocoaErrorDomain") == 0)
+    <span class="pl-k">char</span> *cError;
+    <span class="pl-k">char</span> *hint = <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>;
+    <span class="pl-k">char</span> *notFound = <span class="pl-s"><span class="pl-pds">"</span>(file not found?)<span class="pl-pds">"</span></span>;
+    <span class="pl-k">char</span> *notPlist = <span class="pl-s"><span class="pl-pds">"</span>(file not *.plist?)<span class="pl-pds">"</span></span>;
+    <span class="pl-k">char</span> *chmod = <span class="pl-s"><span class="pl-pds">"</span>(can't write, not enough rights?)<span class="pl-pds">"</span></span>;
+    <span class="pl-k">int</span> code;
+
+    cError = [[error <span class="pl-c1">domain</span>] <span class="pl-c1">UTF8String</span>];
+    code = [error <span class="pl-c1">code</span>];
+
+    <span class="pl-k">if</span>(<span class="pl-c1">strcmp</span> (cError, <span class="pl-s"><span class="pl-pds">"</span>NSCocoaErrorDomain<span class="pl-pds">"</span></span>) == <span class="pl-c1">0</span>)
     {
-        switch (code)
+        <span class="pl-k">switch</span> (code)
         {
-            case 260:  hint = notFound; break;
-            case 3840: hint = notPlist; break;
-            case 513:  hint = chmod;    break;
+            <span class="pl-k">case</span> <span class="pl-c1">260</span>:  hint = notFound; <span class="pl-k">break</span>;
+            <span class="pl-k">case</span> <span class="pl-c1">3840</span>: hint = notPlist; <span class="pl-k">break</span>;
+            <span class="pl-k">case</span> <span class="pl-c1">513</span>:  hint = chmod;    <span class="pl-k">break</span>;
         }
     }
 
-    snprintf(status, 80, "%s: code %d, %s", cError, code, hint);
-    
-    return 1;
+    <span class="pl-c1">snprintf</span>(status, <span class="pl-c1">80</span>, <span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">%s</span>: code <span class="pl-c1">%d</span>, <span class="pl-c1">%s</span><span class="pl-pds">"</span></span>, cError, code, hint);
+
+    <span class="pl-k">return</span> <span class="pl-c1">1</span>;
 
 }
 
-int plistConvert(const char *fileName, int targetFormat, char *status)
+<span class="pl-k">int</span> <span class="pl-en">plistConvert</span>(<span class="pl-k">const</span> <span class="pl-k">char</span> *fileName, <span class="pl-k">int</span> targetFormat, <span class="pl-k">char</span> *status)
 {
-    NSError *error;
-    NSPropertyListFormat format;
-  
-    NSString *path = [NSString stringWithCString: fileName
-                               encoding: NSASCIIStringEncoding];
-                      
-    NSData *plistData = [NSData dataWithContentsOfFile:path
-                                options:NSDataReadingUncached
-                                error:&error];
-  
-    if(error != NULL) return plistError(error, status);
-  
-    id plist = [NSPropertyListSerialization propertyListWithData:plistData
-                    options:NSPropertyListImmutable
-                    format:&format
-                    error:&error];
+    <span class="pl-c1">NSError</span> *error;
+    <span class="pl-c1">NSPropertyListFormat</span> format;
 
-    if(error != NULL) return plistError(error, status);
+    <span class="pl-c1">NSString</span> *path = [<span class="pl-c1">NSString</span> <span class="pl-c1">stringWithCString:</span> fileName
+                               <span class="pl-c1">encoding:</span> NSASCIIStringEncoding];
 
-    NSString *xmlData = [NSPropertyListSerialization dataWithPropertyList:plist
-                            format:(targetFormat==XML?
-                                        NSPropertyListXMLFormat_v1_0:
+    <span class="pl-c1">NSData</span> *plistData = [<span class="pl-c1">NSData</span> <span class="pl-c1">dataWithContentsOfFile:</span>path
+                                <span class="pl-c1">options:</span>NSDataReadingUncached
+                                <span class="pl-c1">error:</span>&amp;error];
+
+    <span class="pl-k">if</span>(error != <span class="pl-c1">NULL</span>) <span class="pl-k">return</span> <span class="pl-c1">plistError</span>(error, status);
+
+    <span class="pl-k">id</span> plist = [<span class="pl-c1">NSPropertyListSerialization</span> <span class="pl-c1">propertyListWithData:</span>plistData
+                    <span class="pl-c1">options:</span>NSPropertyListImmutable
+                    <span class="pl-c1">format:</span>&amp;format
+                    <span class="pl-c1">error:</span>&amp;error];
+
+    <span class="pl-k">if</span>(error != <span class="pl-c1">NULL</span>) <span class="pl-k">return</span> <span class="pl-c1">plistError</span>(error, status);
+
+    <span class="pl-c1">NSString</span> *xmlData = [<span class="pl-c1">NSPropertyListSerialization</span> <span class="pl-c1">dataWithPropertyList:</span>plist
+                            <span class="pl-c1">format:</span>(targetFormat==XML?
+                                        <span class="pl-c1">NSPropertyListXMLFormat_v1_0:</span>
                                         NSPropertyListBinaryFormat_v1_0)
-                            options:0
-                            error:&error];
-    if(error == NULL)
+                            <span class="pl-c1">options:</span><span class="pl-c1">0</span>
+                            <span class="pl-c1">error:</span>&amp;error];
+    <span class="pl-k">if</span>(error == <span class="pl-c1">NULL</span>)
     {
-        [xmlData writeToFile:path
-                 options:NSDataWritingAtomic
-                 error:&error];
+        [xmlData <span class="pl-c1">writeToFile:</span>path
+                 <span class="pl-c1">options:</span>NSDataWritingAtomic
+                 <span class="pl-c1">error:</span>&amp;error];
 
-        if(error != NULL) return plistError(error, status);
+        <span class="pl-k">if</span>(error != <span class="pl-c1">NULL</span>) <span class="pl-k">return</span> <span class="pl-c1">plistError</span>(error, status);
 
-        return 0;
+        <span class="pl-k">return</span> <span class="pl-c1">0</span>;
     }
-    else return plistError(error, status);
+    <span class="pl-k">else</span> <span class="pl-k">return</span> <span class="pl-c1">plistError</span>(error, status);
 
-}
-</source>
-</spoiler>
-собираем простой строкой:
-<source lang="Bash">
-clang -v plistconvert.m -o plistconvert \
+}</pre></div>
+
+<p>
+собираем простой строкой:</p>
+
+<div class="highlight highlight-bash"><pre>clang -v plistconvert.m -o plistconvert \
     -Xlinker -L/User/SDKs/7.1/usr/lib/ \
     -Xlinker -L/User/SDKs/7.1/usr/lib/system/ \
     -isysroot /User/SDKs/7.1/  \
-    -ObjC -framework Foundation
-</source>
-и пользуемся. И комплимент от шеф-повара всем, осилившим первое, второе и десерт. Многие настройки ios хранятся в plist листах, так что мы можем тюнить систему, простой последовательностью:
+    -ObjC -framework Foundation</pre></div>
+
+<p>и пользуемся. И комплимент от шеф-повара всем, осилившим первое, второе и десерт. Многие настройки ios хранятся в plist листах, так что мы можем тюнить систему, простой последовательностью:
 plistconvert -x *.plist
 vim *.plist
-plistconvert -b *.plist
+plistconvert -b *.plist</p>
 
-делаем приложение неудаляемым (у кого дома дети - поймут зачем), а неудаляемые - удаляем (поймут те, кому нафиг не сдался киоск):
+<p>делаем приложение неудаляемым (у кого дома дети - поймут зачем), а неудаляемые - удаляем (поймут те, кому нафиг не сдался киоск):</p>
 
-
-делаем приложение невидимым(находится через спот
+<p>делаем приложение невидимым(находится через спот</p>
+</article>
+</body>
+</html>
